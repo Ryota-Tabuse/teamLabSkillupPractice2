@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Socialite;
+use Illuminate\Http\Request;
+use Laravel\Socialite\Facades\Socialite as LaravelSocialite;
 
 class LoginController extends Controller
 {
@@ -35,5 +38,28 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+    }
+
+    /**
+     * Githunの認証ページへユーザをリダイレクト
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function redirectToProvider()
+    {
+        return Socialite::driver('github')->scopes(['read:user', 'public_repo'])->redirect();
+    }
+
+    /**
+     * Githunの認証ページへユーザをリダイレクト
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function handleProviderCallback(Request $request)
+    {
+        $user = Socialite::driver('github')->user();
+
+        $request->session()->put('github_token', $user->token);
+        return redirect('github');
     }
 }
