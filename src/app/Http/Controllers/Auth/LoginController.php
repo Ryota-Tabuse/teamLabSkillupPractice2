@@ -4,9 +4,8 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
-use Socialite;
-use Illuminate\Http\Request;
-use Laravel\Socialite\Facades\Socialite as LaravelSocialite;
+use Socialite;// 追加！
+use Illuminate\Http\Request;// 追加！
 
 class LoginController extends Controller
 {
@@ -41,22 +40,27 @@ class LoginController extends Controller
     }
 
     /**
-     * Githunの認証ページへユーザをリダイレクト
-     * 
+     * GitHubの認証ページヘユーザーをリダイレクト
+     *
      * @return \Illuminate\Http\Response
      */
-    public function redirectToProvider()
+    public function redirectToProvider()// 追加！
     {
-        return Socialite::driver('github')->scopes(['read:user', 'public_repo'])->redirect();
+        \Log::info("◆◆◆◆◆LoginController:redirectToProviderメソッド◆◆◆◆◆");
+      return Socialite::driver('github')
+      ->scopes(['read:user', 'public_repo'])
+      ->redirect();
     }
 
     /**
-     * Githunの認証ページへユーザをリダイレクト
-     * 
+     * GitHubからユーザー情報を取得
+     *
      * @return \Illuminate\Http\Response
      */
-    public function handleProviderCallback(Request $request)
+    public function handleProviderCallback(Request $request)// 追加！
     {
+        \Log::info("◆◆◆◆◆LoginController:handleProviderCallbackメソッド◆◆◆◆◆");
+
         $user = Socialite::driver('github')->user();
 
         $request->session()->put('github_token', $user->token);

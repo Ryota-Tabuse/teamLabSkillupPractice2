@@ -11,6 +11,7 @@ class GithubController extends Controller
     public function top(Request $request)
     {
         $token = $request->session()->get('github_token', null);
+		\Log::info("◆◆◆◆◆GithubController:topメソッド◆◆◆◆◆");
 
         try {
             $user = Socialite::driver('github')->userFromToken($token);
@@ -35,6 +36,8 @@ class GithubController extends Controller
 
     public function createIssue(Request $request)
     {
+		\Log::info("◆◆◆◆◆GithubController:createIssueメソッド◆◆◆◆◆");
+		
         $token = $request->session()->get('github_token', null);
         $user = Socialite::driver('github')->userFromToken($token);
 
